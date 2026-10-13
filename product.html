@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SOLT</title>
+  <meta name="description" content="Zero-sugar electrolyte sticks with real sea salt.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="config.js"></script>
+  <script src="assets/data.js"></script>
+  <script src="assets/app.js" defer></script>
+</head>
+<body data-page="product">
+  <main>
+    <div class="wrap pdp" id="pdp"></div>
+
+    <div class="ticker"><div class="ticker__track" data-ticker="Zero sugar|Real sea salt|No artificial dyes|Made in the USA|Tear. Pour. Go."></div></div>
+
+    <section class="section">
+      <div class="wrap">
+        <h2 class="h-xl reveal-word" style="text-align:center">NOT ALL HYDRATION IS CREATED EQUAL.</h2>
+        <p style="text-align:center;font-size:18px;margin:14px 0 0">SOLT is the cleaner choice.</p>
+        <div style="overflow-x:auto"><table class="vs-table" id="vs"></table></div>
+      </div>
+    </section>
+
+    <section class="section stat" style="text-align:left">
+      <div class="cubes" data-cubes="6"></div>
+      <div class="wrap science">
+        <div class="stat__ring" style="margin:0 auto">
+          <svg viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="96" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="3 7"/></svg>
+          <div class="stat__num" style="font-size:clamp(56px,7vw,100px)">salt<small>+</small>H<small>2</small>O</div>
+        </div>
+        <div class="reveal" style="color:#0b2d55">
+          <span class="eyebrow">Backed by science</span>
+          <h2 class="h-lg" style="margin:10px 0 16px">The science behind it</h2>
+          <p>The American College of Sports Medicine recommends that people who sweat heavily replace sodium along with fluid, because sweat carries significant amounts of sodium and drinking plain water alone does not replace it. Sodium in a drink also helps stimulate thirst and supports fluid retention after exercise.</p>
+          <p class="cite">Sawka, M. N., Burke, L. M., Eichner, E. R., Maughan, R. J., Montain, S. J., &amp; Stachenfeld, N. S. (2007). American College of Sports Medicine position stand: Exercise and fluid replacement. <i>Medicine &amp; Science in Sports &amp; Exercise, 39</i>(2), 377–390.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section faq">
+      <div class="wrap" style="max-width:900px">
+        <h2 class="h-lg" style="margin-bottom:20px">Questions</h2>
+        <details><summary>How do I take it?</summary><p>Tear one stick into 400–600ml of cold water and shake. Take one in the morning, around training, or whenever you've been sweating. Night sticks go in warm or cold water about 30 minutes before bed.</p></details>
+        <details><summary>Isn't that a lot of sodium?</summary><p>It's designed for people who sweat: athletes, outdoor workers, hot climates, long flights. If you're on a low-sodium diet or have a medical condition, check with your doctor before using it.</p></details>
+        <details><summary>What's it sweetened with?</summary><p>Monk fruit and stevia leaf extract. No sugar, no sucralose, no aspartame. Endure is the exception: it has 25g of carbs on purpose, for long sessions.</p></details>
+        <details><summary>Can I cancel my subscription?</summary><p>Yes. Skip, swap flavors, change frequency or cancel any time from your account. No fees, no phone calls.</p></details>
+        <details><summary>When does it ship?</summary><p>Orders ship within 1–2 business days from the USA. Free shipping on orders over $60.</p></details>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0">
+      <div class="wrap carousel" data-carousel>
+        <div class="carousel__head">
+          <h2 class="h-lg">You may also like</h2>
+          <div class="carousel__nav"><button class="round-btn" data-dir="-1" aria-label="Scroll left"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m15 5-7 7 7 7"/></svg></button><button class="round-btn" data-dir="1" aria-label="Scroll right"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m9 5 7 7-7 7"/></svg></button></div>
+        </div>
+        <div class="carousel__track" id="related"></div>
+      </div>
+    </section>
+  </main>
+
+  <div class="sticky-atc" id="sticky-atc">
+    <div class="wrap sticky-atc__inner">
+      <div id="sticky-pouch"></div>
+      <div class="sticky-atc__name" id="sticky-name">Product<small id="sticky-price"></small></div>
+      <button class="btn btn--dark" id="sticky-atc-btn">Add to cart</button>
+    </div>
+  </div>
+</body>
+</html>

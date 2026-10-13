@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SOLT | Clean Electrolytes with Real Sea Salt</title>
+  <meta name="description" content="SOLT makes zero-sugar electrolyte sticks with real sea salt and real fruit. Hydration, focus, sleep and endurance in one tear-and-pour stick.">
+  <meta property="og:title" content="SOLT | Salt, solved.">
+  <meta property="og:description" content="Zero-sugar electrolyte sticks with 1000mg of real sea salt.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="config.js"></script>
+  <script src="assets/data.js"></script>
+  <script src="assets/app.js" defer></script>
+</head>
+<body data-page="home">
+  <main>
+    <!-- 1. Hero slideshow: giant word + floating 3D pouch per flavor -->
+    <section class="hero" id="hero" aria-label="Featured flavors"></section>
+
+    <!-- 2. Trust ticker -->
+    <div class="ticker"><div class="ticker__track" data-ticker="Zero sugar|Real sea salt|No artificial dyes|Made in the USA|1000mg sodium|Third-party tested"></div></div>
+
+    <!-- 3. Product carousel with quick view -->
+    <section class="section" id="shop">
+      <div class="wrap carousel" data-carousel>
+        <div class="carousel__head">
+          <div><span class="eyebrow">The lineup</span><h2 class="h-lg reveal-word">Pick your salt.</h2></div>
+          <div class="carousel__nav"><button class="round-btn" data-dir="-1" aria-label="Scroll left"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m15 5-7 7 7 7"/></svg></button><button class="round-btn" data-dir="1" aria-label="Scroll right"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m9 5 7 7-7 7"/></svg></button></div>
+        </div>
+        <div class="carousel__track" id="products"></div>
+      </div>
+    </section>
+
+    <!-- 4. "The first ... ever." media banner with drip -->
+    <section class="first">
+      <div class="cubes" data-cubes="6"></div>
+      <a class="btn btn--white first__shop" href="product.html?id=coldbrew" data-track="banner_cta" data-product="coldbrew">shop now</a>
+      <svg class="drip" viewBox="0 0 120 500" preserveAspectRatio="xMidYMin meet" aria-hidden="true">
+        <defs><linearGradient id="coffee" x1="0" x2="1"><stop offset="0" stop-color="#2a1a12"/><stop offset=".45" stop-color="#7a4a2c"/><stop offset="1" stop-color="#2a1a12"/></linearGradient></defs>
+        <path d="M30 0h44c0 120-6 220-10 300-2 40-8 60-12 60s-10-20-12-60C36 220 30 120 30 0Z" fill="url(#coffee)"/>
+        <circle cx="52" cy="380" r="11" fill="#5b3620"/>
+      </svg>
+      <div>
+        <h2 class="first__line reveal">the first <span class="boxed">cold brew</span> electrolyte</h2>
+        <div class="first__product" id="first-product" data-tilt></div>
+      </div>
+      <span class="first__ever">ever.</span>
+    </section>
+
+    <!-- 5. "We always use" + flavor blobs -->
+    <section class="section always">
+      <div class="wrap">
+        <h2 class="h-xl">we always use<br><span class="circled">real sea salt<svg viewBox="0 0 400 120" preserveAspectRatio="none" aria-hidden="true"><path d="M20 70C30 22 140 8 230 12s160 22 150 58c-10 40-150 48-240 42S8 100 22 60c8-22 40-34 70-38"/></svg></span></h2>
+        <div class="crystals" id="crystals"></div>
+      </div>
+    </section>
+
+    <!-- 6. Big stat with rotating dashed ring -->
+    <section class="section stat" id="science">
+      <div class="cubes" data-cubes="8"></div>
+      <span class="drop" style="left:12%;top:28%;animation:drift 6s ease-in-out infinite"></span>
+      <span class="drop" style="right:14%;top:55%;width:30px;height:30px;animation:drift 7s -2s ease-in-out infinite"></span>
+      <div class="wrap">
+        <div class="stat__ring">
+          <svg viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="96" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="3 7"/></svg>
+          <div class="stat__num">1000<small>mg</small></div>
+        </div>
+        <div class="stat__copy reveal">
+          <p>The average athlete loses roughly a gram of sodium in every litre of sweat. Most sports drinks put back a fraction of that and make up the difference with sugar.</p>
+          <p>Water alone can't replace what sweat takes out. Salt is what helps your body hold onto the water you drink.</p>
+          <p>We built SOLT around that one number. Real sea salt, real fruit, zero sugar, nothing else to decode.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Old way vs SOLT way drag comparison -->
+    <section class="section">
+      <div class="wrap">
+        <h2 class="h-lg reveal-word" style="margin-bottom:26px;text-align:center">Drag. See the difference.</h2>
+        <div class="compare" id="compare">
+          <div class="compare__pane compare__pane--old"><h3 class="compare__title">neon.</h3><ul class="compare__list"><li>34g of sugar per bottle</li><li>Red 40, Blue 1, Yellow 5</li><li>~270mg sodium</li><li>A sugar crash at mile 6</li></ul><span class="neon-bottle"></span></div>
+          <div class="compare__pane compare__pane--new"><h3 class="compare__title">salt.</h3><ul class="compare__list"><li>0g sugar</li><li>Colored by real fruit</li><li>1000mg real sea salt</li><li>Steady all day</li></ul><div id="compare-sticks"></div></div>
+          <div class="compare__handle"></div>
+          <input type="range" min="0" max="100" value="50" aria-label="Compare sports drinks with SOLT">
+        </div>
+        <div style="text-align:center;margin-top:34px"><a class="btn btn--dark" href="product.html?id=yuzu" data-track="compare_cta">Shop Now</a></div>
+      </div>
+    </section>
+
+    <!-- 8. Expert endorsement (placeholder: add a real, consenting expert before launch) -->
+    <section class="section" style="padding-top:20px">
+      <div class="wrap expert">
+        <div>
+          <span class="eyebrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></svg> Formulated with:</span>
+          <h2 class="h-xl" style="font-size:clamp(40px,5.6vw,80px);margin-top:12px">[EXPERT NAME]<br>MS, RD</h2>
+          <p class="expert__quote">"[Placeholder quote from your formulating dietitian or sports scientist. Only publish a real quote from a real person who has approved it.]"</p>
+          <a class="btn btn--accent" href="product.html?id=yuzu" data-track="expert_cta">shop now</a>
+          <div class="expert__mark"><div class="cube cube--dark"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+        </div>
+        <div style="position:relative">
+          <svg class="badge-spin" viewBox="0 0 130 130" aria-hidden="true"><defs><path id="circ" d="M65 65m-50 0a50 50 0 1 1 100 0a50 50 0 1 1-100 0"/></defs><circle cx="65" cy="65" r="62" fill="#d6ff3a" stroke="#111" stroke-width="2"/><text><textPath href="#circ">science backed · rd approved · </textPath></text></svg>
+          <div class="expert__photo">
+            <div class="expert__placeholder">Photo placeholder: swap in your expert's headshot.</div>
+            <svg viewBox="0 0 200 220" aria-hidden="true"><circle cx="100" cy="70" r="42" fill="#0b2d55" opacity=".85"/><path d="M20 220c0-55 36-95 80-95s80 40 80 95Z" fill="#0b2d55" opacity=".85"/></svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. Testimonials -->
+    <section class="section" style="padding-top:20px">
+      <div class="wrap carousel" data-carousel>
+        <div class="carousel__head">
+          <div><span class="eyebrow">Early testers</span><h2 class="h-lg reveal-word">People are talking.</h2></div>
+          <div class="carousel__nav"><button class="round-btn" data-dir="-1" aria-label="Previous review"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m15 5-7 7 7 7"/></svg></button><button class="round-btn" data-dir="1" aria-label="Next review"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m9 5 7 7-7 7"/></svg></button></div>
+        </div>
+        <div class="reviews__track" id="reviews"></div>
+      </div>
+    </section>
+
+    <!-- 10. UGC strip -->
+    <section class="ugc" style="padding-bottom:70px"><div class="ugc__track" id="ugc"></div></section>
+  </main>
+</body>
+</html>
