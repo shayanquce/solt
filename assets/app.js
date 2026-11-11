@@ -31,6 +31,16 @@
   };
   const LOGO = `<span class="logo__mark" role="img" aria-label="Honeyworth"></span>`;
 
+  /* Brand line icons: the three ingredients + a honeycomb cell. */
+  const svg = (d, extra = "") => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">${d}${extra}</svg>`;
+  const G = {
+    drop: svg('<path d="M12 2.6c3.2 4.6 6.2 8 6.2 11.3a6.2 6.2 0 0 1-12.4 0c0-3.3 3-6.7 6.2-11.3Z"/><path d="M8.9 14.4a3.2 3.2 0 0 0 2.6 3.1"/>'),
+    leaf: svg('<path d="M12 2.2l1.4 3.4 2.2-1-.6 4.4 3.2-2.2.6 2.2 2.8-.4-1.2 3 1.6 1-4.6 2.8.6 2-5-.8-.4 5.6h-1.2l-.4-5.6-5 .8.6-2L2 12.6l1.6-1-1.2-3 2.8.4.6-2.2L9 9l-.6-4.4 2.2 1Z"/><path d="M12 9.5V21.6"/>'),
+    crystal: svg('<path d="M12 2.8 19.6 7v10L12 21.2 4.4 17V7Z"/><path d="M4.4 7 12 11.2 19.6 7M12 11.2v10"/>'),
+    hex: svg('<path d="M12 2.6 20.2 7.3v9.4L12 21.4l-8.2-4.7V7.3Z"/><path d="M12 7.6l3.9 2.2v4.4L12 16.4l-3.9-2.2V9.8Z"/>'),
+    spark: svg('<path d="M12 3c.4 4.6 4.4 8.6 9 9-4.6.4-8.6 4.4-9 9-.4-4.6-4.4-8.6-9-9 4.6-.4 8.6-4.4 9-9Z"/>'),
+  };
+
   /* ================= 3D product renders =================
      Every 3D object is the real Honeyworth sachet: front + back packaging art,
      with a stack of silhouette layers between them for thickness. */
@@ -159,11 +169,11 @@
       </aside>
 
       <div class="modal" id="waitlist" role="dialog" aria-modal="true" aria-label="Reserve your order"><div class="modal__card"><button class="icon-btn modal__close" data-close aria-label="Close">${I.close}</button>
-        <div class="split"><div class="split__art"><div class="cubes" data-cubes="5"></div><div class="tilt floaty">${pouch(byId("original"))}</div></div>
+        <div class="split"><div class="split__art"><div class="glyphs" data-glyphs="5"></div><div class="tilt floaty">${pouch(byId("original"))}</div></div>
         <div class="split__body" id="waitlist-body"></div></div></div></div>
 
       <div class="modal" id="popup" role="dialog" aria-modal="true" aria-label="Discount offer"><div class="modal__card"><button class="icon-btn modal__close" data-close aria-label="Close">${I.close}</button>
-        <div class="split"><div class="split__art" style="background:linear-gradient(160deg,#E2A93B,#2F5A3F)"><div class="cubes" data-cubes="6"></div><div class="tilt floaty">${pouch(byId("run"))}</div></div>
+        <div class="split"><div class="split__art" style="background:linear-gradient(160deg,#E2A93B,#2F5A3F)"><div class="glyphs" data-glyphs="6"></div><div class="tilt floaty">${pouch(byId("run"))}</div></div>
         <div class="split__body" id="popup-body"></div></div></div></div>
 
       <div class="modal" id="quickview" role="dialog" aria-modal="true" aria-label="Quick view"><div class="modal__card"><button class="icon-btn modal__close" data-close aria-label="Close">${I.close}</button><div id="qv-body"></div></div></div>
@@ -172,15 +182,23 @@
 
   function toast(msg) { const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove("show"), 2600); }
 
-  function fillCubes() {
-    $$("[data-cubes]").forEach((box) => {
-      const n = +box.dataset.cubes; let html = "";
+  /* Floating background graphics: thin line drawings of the three ingredients
+     (honey drop, maple leaf, salt crystal) plus a honeycomb cell, kept to the edges so
+     they never sit on top of the product or headline. */
+  function fillGlyphs() {
+    const kinds = ["drop", "leaf", "crystal", "hex", "leaf", "drop", "crystal", "hex", "spark"];
+    $$("[data-glyphs]").forEach((box) => {
+      const n = +box.dataset.glyphs; let html = "";
+      // hand-placed slots around the edges of the panel
+      const slots = [[6, 20], [89, 16], [11, 66], [85, 62], [20, 86], [76, 84], [4, 42], [93, 40], [27, 12], [68, 10]];
       for (let i = 0; i < n; i++) {
-        const s = 14 + ((i * 37) % 36), x = (i * 53 + 7) % 92, y = (i * 29 + 11) % 86, d = 9 + (i % 4) * 4;
-        html += `<div class="float" style="left:${x}%;top:${y}%;animation-delay:${-i * 1.3}s"><div class="cube" style="--s:${s}px;animation-duration:${d}s;animation-delay:${-i}s"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>`;
+        const [x, y] = slots[i % slots.length];
+        const s = 28 + ((i * 29) % 28), r = (i * 47) % 50 - 25;
+        html += `<span class="glyph" style="left:${x}%;top:${y}%;--s:${s}px;--r:${r}deg;animation-delay:${-i * 1.7}s;animation-duration:${9 + (i % 4) * 3}s">${G[kinds[(i + n) % kinds.length]]}</span>`;
       }
       box.innerHTML = html;
     });
+    $$("[data-icon]").forEach((el) => (el.innerHTML = G[el.dataset.icon] || ""));
   }
 
   /* ================= checkout = fake door ================= */
@@ -289,7 +307,7 @@
     // hero
     const hero = $("#hero");
     hero.innerHTML = PRODUCTS.map((p, i) => `<div class="hero__slide ${i === 0 ? "is-active" : ""}" style="--sky1:${p.sky[0]};--sky2:${p.sky[1]}" data-tilt>
-        <div class="hero__sun"></div><div class="cubes" data-cubes="7"></div>
+        <div class="hero__sun"></div><div class="glyphs" data-glyphs="7"></div>
         <h2 class="hero__word"><span>${p.hero[0]}</span><span>${p.hero[1]}</span></h2>
         <div class="hero__product"><div class="tilt floaty" style="position:relative">${pouch(p)}<div class="hero__sticks">${stick(p)}${stick(p)}</div></div></div>
         <a class="btn btn--accent hero__cta" href="product.html?id=${p.id}" data-track="hero_cta" data-product="${p.id}">Shop ${p.short}</a>
@@ -323,8 +341,8 @@
     $("#first-product").innerHTML = `<div class="tilt floaty">${pouch(cb)}</div>`;
 
     // crystals
-    const ingredients = [["Honey", "canadian", "#F6C75E", "#B8741A"], ["Maple syrup", "organic canadian", "#D98B3A", "#7A3A12"], ["Sea salt", "pink himalayan", "#F7DCD6", "#C98C86"]];
-    $("#crystals").innerHTML = ingredients.map(([n, s, b1, b2]) => `<a class="crystal" href="product.html?id=original"><span class="crystal__blob" style="--b1:${b1};--b2:${b2}"></span><b>${n}</b><small>${s}</small></a>`).join("");
+    const ingredients = [["Honey", "canadian", "#F6C75E", "#B8741A", "drop", "#FFF8E6"], ["Maple syrup", "organic canadian", "#D98B3A", "#7A3A12", "leaf", "#FFF1E2"], ["Sea salt", "pink himalayan", "#F7DCD6", "#C98C86", "crystal", "#8A4F4A"]];
+    $("#crystals").innerHTML = ingredients.map(([n, s, b1, b2, icon, ic]) => `<a class="crystal" href="product.html?id=original"><span class="crystal__blob" style="--b1:${b1};--b2:${b2}"><span class="crystal__icon" style="color:${ic}">${G[icon]}</span></span><b>${n}</b><small>${s}</small></a>`).join("");
 
     // comparison slider
     const cmp = $("#compare");
@@ -363,7 +381,7 @@
       { thumb: pouch(p), html: `<div class="tilt" data-drag>${pouch(p)}</div><span class="hint">Drag to rotate</span>` },
       { thumb: stick(p), html: `<div class="gallery__sticks">${stick(p)}${stick(p, "", true)}${stick(p)}${stick(p, "", true)}</div>`, cls: "" },
       { thumb: `<span style="font-weight:800;font-size:11px">FACTS</span>`, html: `<div class="facts"><img src="assets/img/hw-label.webp" alt="Back of the Honeyworth Energy Gel sachet with ingredients and nutrition facts"><div class="panel"><h4>Nutrition Facts</h4><small>Serving size 1 sachet (40 g)</small>${p.nutrition.map(([k, v]) => `<div><b>${k}</b><span>${v}</span></div>`).join("")}<p class="fine" style="margin:10px 0 0">Ingredients: ${p.ingr.join(", ")}. Nothing else.</p></div></div>` },
-      { thumb: `<span style="width:100%;height:100%;background:linear-gradient(180deg,${p.sky[0]},${p.sky[1]})"></span>`, html: `<div class="cubes" data-cubes="9"></div><div class="tilt floaty">${pouch(p)}</div>`, cls: "gallery__view--sky" },
+      { thumb: `<span style="width:100%;height:100%;background:linear-gradient(180deg,${p.sky[0]},${p.sky[1]})"></span>`, html: `<div class="glyphs" data-glyphs="9"></div><div class="tilt floaty">${pouch(p)}</div>`, cls: "gallery__view--sky" },
     ];
     $("#pdp").innerHTML = `
       <div class="gallery"><div class="gallery__thumbs">${views.map((v, i) => `<button class="${i === 0 ? "is-active" : ""}" data-view="${i}" aria-label="Image ${i + 1}">${v.thumb}</button>`).join("")}</div>
@@ -439,7 +457,7 @@
     chrome(page === "home");
     loadPixels();
     if (page === "home") initHome(); else initPDP();
-    fillCubes(); splitWords(); observe(); bindTilt(); bindCarousels(); renderCart(); popup();
+    fillGlyphs(); splitWords(); observe(); bindTilt(); bindCarousels(); renderCart(); popup();
     track("page_view", { page_type: page, referrer: document.referrer });
 
     const header = $(".header");

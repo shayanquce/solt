@@ -5,7 +5,7 @@ A static site for **Honeyworth Energy Gel** (honey + maple syrup + sea salt). It
 Visitors browse, pick a flavor, add to cart and hit **Checkout**. Checkout opens a "first batch isn't shipping yet" screen that collects their email. No payment is taken. Every step is tracked, so you can measure real purchase intent.
 
 ## Files
-- `index.html`: home page. Hero slider, ticker, product carousel with quick view, "honey. maple. sea salt. that's it." banner with honey drip, three-ingredient blobs, 30g stat, more-vs-less drag slider, expert block, reviews, UGC strip.
+- `index.html`: home page. Hero slider, ticker, product carousel with quick view, "honey. maple. sea salt. that's it." banner with honey drip, three-ingredient blobs with line icons, an illustrated "Take it. Pocket it. Move." ritual section, 30g stat, more-vs-less drag slider, expert block, reviews, UGC strip.
 - `product.html?id=original|run|ride|match|move`: product page. Draggable 3D sachet (spin it to see the back of the pack), pack size, subscribe & save, comparison table, "every 30 minutes" section, FAQ, sticky add-to-cart bar.
 - `assets/data.js`: **all products, prices and colors.** Every product is the same gel boxed for a different audience (run / ride / match / everyday), so checkouts per product double as the playbook's audience test.
 - `assets/img/`: the real packaging art (`hw-front.webp`, `hw-back.webp`, `hw-label.webp`) and the wordmark (`hw-wordmark.png`). Every 3D element on the site is built from these.

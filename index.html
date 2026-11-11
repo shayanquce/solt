@@ -8,7 +8,7 @@
   <meta property="og:title" content="Honeyworth | Real fuel. Real movement.">
   <meta property="og:description" content="Honey. Maple. Sea salt. Three-ingredient energy gel in a pocket-size sachet.">
   <meta property="og:image" content="assets/img/hw-front.webp">
-  <link rel="icon" href="assets/img/hw-front.webp">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400..800&family=Noto+Serif+Display:wdth,wght@62.5..100,400..800&display=swap" rel="stylesheet">
@@ -38,7 +38,7 @@
 
     <!-- 4. "Honey. Maple. Sea salt. That's it." media banner with honey drip -->
     <section class="first">
-      <div class="cubes" data-cubes="6"></div>
+      <div class="glyphs" data-glyphs="6"></div>
       <a class="btn btn--white first__shop" href="product.html?id=original" data-track="banner_cta" data-product="original">shop now</a>
       <svg class="drip" viewBox="0 0 120 500" preserveAspectRatio="xMidYMin meet" aria-hidden="true">
         <defs><linearGradient id="honey" x1="0" x2="1"><stop offset="0" stop-color="#9a5a12"/><stop offset=".45" stop-color="#f2b545"/><stop offset="1" stop-color="#9a5a12"/></linearGradient></defs>
@@ -60,11 +60,49 @@
       </div>
     </section>
 
+    <!-- 5b. The ritual: take it, pocket it, move (illustrated) -->
+    <section class="section ritual" id="ritual">
+      <div class="wrap">
+        <div class="ritual__head"><span class="eyebrow">The ritual</span><h2 class="h-xl reveal-word">Take it. Pocket it. Move.</h2></div>
+        <div class="ritual__grid">
+          <article class="ritual__card reveal">
+            <div class="ritual__art ritual__art--tear" aria-hidden="true">
+              <div class="tear"><span class="tear__body"></span><span class="tear__cap"></span></div>
+              <span class="ritual__note">tear here</span>
+            </div>
+            <span class="ritual__num">01</span><h3 class="h-md">Take it</h3>
+            <p>Tear at the notch and take it straight from the sachet. No mixing, no bottle, no scoop.</p>
+          </article>
+          <article class="ritual__card reveal">
+            <div class="ritual__art ritual__art--pocket" aria-hidden="true">
+              <span class="pocket__sachet"></span>
+              <svg class="pocket" viewBox="0 0 200 200"><path class="pocket__fill" d="M22 38h156v98l-78 46-78-46Z"/><path class="pocket__stitch" d="M32 50h136v80l-68 40-68-40Z"/><path class="pocket__hem" d="M22 38h156"/><circle class="pocket__rivet" cx="30" cy="44" r="3.4"/><circle class="pocket__rivet" cx="170" cy="44" r="3.4"/></svg>
+            </div>
+            <span class="ritual__num">02</span><h3 class="h-md">Pocket it</h3>
+            <p>Shorts, jersey, kit bag. Forty grams of fuel that goes wherever you do.</p>
+          </article>
+          <article class="ritual__card reveal">
+            <div class="ritual__art ritual__art--move" aria-hidden="true">
+              <svg class="route" viewBox="0 0 300 300">
+                <g class="route__contours"><path d="M-10 70c60-30 110 10 170-10s110-50 150-30"/><path d="M-10 110c70-20 120 20 180 0s100-40 140-20"/><path d="M-10 230c50 10 90-30 150-20s110 50 170 30"/><path d="M-10 270c60 0 100-25 160-15s100 40 160 25"/><path d="M60 160c0-22 28-34 50-26s28 34 6 44-56 4-56-18Z"/><path d="M44 162c0-34 40-50 72-38s40 50 8 64-80 8-80-26Z"/></g>
+                <path class="route__line" d="M34 262C80 262 74 192 120 184S188 214 206 160 170 80 222 62 272 58 270 30"/>
+                <g class="route__mark"><circle cx="34" cy="262" r="6"/><text x="46" y="276">start</text></g>
+                <g class="route__mark"><circle cx="120" cy="184" r="7"/><text x="92" y="214">0:30</text></g>
+                <g class="route__mark"><circle cx="206" cy="160" r="7"/><text x="218" y="168">1:00</text></g>
+                <g class="route__mark"><circle cx="222" cy="62" r="7"/><text x="176" y="52">1:30</text></g>
+              </svg>
+              <span class="ritual__note">one every 30 min</span>
+            </div>
+            <span class="ritual__num">03</span><h3 class="h-md">Move</h3>
+            <p>For sessions over an hour, take one every 30 minutes. Then keep going.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <!-- 6. Big stat with rotating dashed ring -->
     <section class="section stat" id="science">
-      <div class="cubes" data-cubes="8"></div>
-      <span class="drop" style="left:12%;top:28%;animation:drift 6s ease-in-out infinite"></span>
-      <span class="drop" style="right:14%;top:55%;width:30px;height:30px;animation:drift 7s -2s ease-in-out infinite"></span>
+      <div class="glyphs" data-glyphs="8"></div>
       <div class="wrap">
         <div class="stat__ring">
           <svg viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="96" fill="none" stroke="#F7F1E4" stroke-width="2" stroke-dasharray="3 7"/></svg>
@@ -100,7 +138,7 @@
           <h2 class="h-xl" style="font-size:clamp(40px,5.6vw,80px);margin-top:12px">[EXPERT NAME]<br>MS, RD</h2>
           <p class="expert__quote">"[Placeholder quote from your formulating dietitian or sports scientist. Only publish a real quote from a real person who has approved it.]"</p>
           <a class="btn btn--accent" href="product.html?id=original" data-track="expert_cta">shop now</a>
-          <div class="expert__mark"><div class="cube cube--dark"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+          <div class="expert__icons"><span data-icon="drop"></span><span data-icon="leaf"></span><span data-icon="crystal"></span></div>
         </div>
         <div style="position:relative">
           <svg class="badge-spin" viewBox="0 0 130 130" aria-hidden="true"><defs><path id="circ" d="M65 65m-50 0a50 50 0 1 1 100 0a50 50 0 1 1-100 0"/></defs><circle cx="65" cy="65" r="62" fill="#E2A93B" stroke="#16301F" stroke-width="2"/><text fill="#16301F"><textPath href="#circ">real fuel · real movement · </textPath></text></svg>

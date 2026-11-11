@@ -69,18 +69,21 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .mobile-nav a { font-size: 40px; font-weight: 800; letter-spacing: -.03em; text-decoration: none; }
 .mobile-nav .icon-btn { position: absolute; top: 16px; right: 16px; }
 
-/* ---------- 3D primitives ---------- */
-/* Floating "cubes" are now mini Honeyworth sachets tumbling in 3D (front + back faces). */
-.cube { --s: 40px; position: absolute; width: var(--s); height: calc(var(--s) / .459); transform-style: preserve-3d; animation: spin3d 14s linear infinite; }
-.cube i { position: absolute; inset: 0; background: var(--sachet) center / contain no-repeat; backface-visibility: hidden; -webkit-backface-visibility: hidden; transform: translateZ(1px); }
-.cube i:nth-child(2) { background-image: var(--sachet-back); transform: rotateY(180deg) translateZ(1px); }
-.cube i:nth-child(n+3) { display: none; }
-@keyframes spin3d { from { transform: rotateX(0) rotateY(0) rotateZ(0); } to { transform: rotateX(360deg) rotateY(720deg) rotateZ(180deg); } }
-.cubes { position: absolute; inset: 0; perspective: 800px; pointer-events: none; }
-.cubes .float { position: absolute; animation: drift 7s ease-in-out infinite; }
-@keyframes drift { 0%,100% { transform: translate3d(0,0,0); } 50% { transform: translate3d(10px,-26px,0); } }
+/* ---------- brand graphics ---------- */
+/* Floating line drawings of the ingredients (honey drop, maple leaf, salt crystal, honeycomb). */
+.glyphs { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.glyph { position: absolute; width: var(--s); height: var(--s); color: var(--glyph, rgba(247,241,228,.62)); transform: rotate(var(--r)); animation: glyphDrift 11s ease-in-out infinite; }
+.glyph svg, [data-icon] svg { width: 100%; height: 100%; display: block; }
+@keyframes glyphDrift { 0%,100% { transform: translate(0,0) rotate(var(--r)); } 50% { transform: translate(8px,-16px) rotate(calc(var(--r) + 12deg)); } }
 
-.drop { position: absolute; width: 46px; height: 46px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.95), rgba(255,255,255,.15) 40%, var(--c, #E2A93B) 75%); box-shadow: 0 12px 24px rgba(0,0,0,.18), inset -6px -6px 12px rgba(0,0,0,.18); }
+/* The pack's checkerboard, faded down from the top, behind colored panels. */
+.hero__slide, .first, .stat, .split__art, .gallery__view--sky, .ugc__tile, .ritual__art--move { isolation: isolate; }
+.hero__slide::before, .first::before, .stat::before, .split__art::before, .gallery__view--sky::before, .ugc__tile::before, .ritual__art--move::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: repeating-conic-gradient(rgba(255,255,255,.08) 0 25%, transparent 0 50%) 0 0 / var(--chk, 72px) var(--chk, 72px);
+  -webkit-mask: linear-gradient(180deg, #000, transparent 46%); mask: linear-gradient(180deg, #000, transparent 46%);
+}
+.ugc__tile, .split__art, .ritual__art--move { --chk: 32px; }
 
 /* The pouch: the real Honeyworth sachet in CSS 3D (front art, back art, layered silhouette edge).
    --w keeps its old meaning (the old bag's box width) so every placement keeps the same height. */
@@ -132,7 +135,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .hero__dots button { width: 10px; height: 10px; border-radius: 5px; border: 0; background: rgba(255,255,255,.55); padding: 0; transition: width .4s var(--ease), background .3s; }
 .hero__dots button.is-active { width: 34px; background: var(--paper); }
 @media (max-width: 700px) {
-  .hero__word { font-size: 31vw; padding-bottom: 14vh; }
+  .hero__word { font-size: 25vw; padding-bottom: 14vh; }
   .hero__product .pouch { --w: 46vw; }
   .header__right [aria-label="Search"] { display: none; }
   .hero__arrow { width: 42px; height: 42px; margin-top: -21px; }
@@ -184,7 +187,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .first__shop { position: absolute; z-index: 4; top: 64px; left: 50%; transform: translateX(-50%); }
 .first__product { position: relative; z-index: 1; margin-top: 30px; }
 .first__product .pouch { --w: clamp(240px, 26vw, 360px); --ry: 12deg; --rz: -4deg; }
-.drip { position: absolute; z-index: 2; top: -2px; left: 50%; width: 120px; margin-left: -20px; height: 62%; }
+.drip { position: absolute; z-index: 0; top: -2px; left: 50%; width: 120px; margin-left: -20px; height: 62%; }
 .drip path { animation: dripGrow 4.5s ease-in-out infinite; transform-origin: top; }
 .drip circle { animation: dripFall 4.5s ease-in infinite; }
 @keyframes dripGrow { 0% { transform: scaleY(.55); } 60% { transform: scaleY(1); } 100% { transform: scaleY(.55); } }
@@ -206,6 +209,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .crystal:nth-child(4) .crystal__blob { animation-delay: -4.5s; }
 .crystal:nth-child(5) .crystal__blob { animation-delay: -6s; }
 @keyframes wobble { 0%,100% { border-radius: 47% 53% 45% 55% / 52% 44% 56% 48%; } 50% { border-radius: 55% 45% 52% 48% / 45% 55% 45% 55%; } }
+.crystal__blob { display: grid; place-items: center; }
+.crystal__icon { width: 42%; height: 42%; opacity: .9; }
 .crystal b { font-size: 15px; } .crystal small { color: var(--muted); font-size: 13px; margin-top: -10px; }
 @media (max-width: 760px) { .crystals { grid-template-columns: repeat(3, 1fr); } }
 
@@ -218,13 +223,14 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .stat__num small { font-size: .35em; letter-spacing: -.02em; }
 .stat__copy { max-width: 640px; margin: 0 auto; font-size: 17px; line-height: 1.55; font-weight: 500;  }
 .stat__copy p { margin: 0 0 16px; }
-.stat .drop { --c: #E2A93B; }
 .stat .cite { color: rgba(247,241,228,.72); }
 
 /* ---------- comparison slider ---------- */
 .compare { position: relative; border-radius: 22px; overflow: hidden; width: 100%; height: clamp(400px, 44vw, 560px); user-select: none; touch-action: pan-y; }
 .compare__pane { position: absolute; inset: 0; display: grid; align-content: center; padding: clamp(24px, 5vw, 70px); }
-.compare__pane--old { background: radial-gradient(80% 90% at 70% 60%, #ff3df0, #6b00ff 55%, #2a0066); color: var(--paper); }
+.compare__pane--old { background: linear-gradient(rgba(140,200,255,.09) 1px, transparent 1px) 0 0 / 28px 28px, linear-gradient(90deg, rgba(140,200,255,.09) 1px, transparent 1px) 0 0 / 28px 28px, radial-gradient(80% 90% at 70% 60%, #3c4452, #1e232c 60%, #12151b); color: #DCE3EC; }
+.compare__pane--old .compare__list li::before { content: "+ "; color: #3df0ff; font-weight: 800; }
+.compare__pane--new .compare__list li::before { content: "\2713  "; color: var(--accent-dark); font-weight: 800; }
 .compare__pane--new { background: radial-gradient(80% 90% at 30% 60%, #FBF7EE 0%, #F1E4C6 45%, #DDB872 100%); color: var(--ink); clip-path: inset(0 0 0 var(--pos, 50%)); justify-items: end; text-align: right; }
 .compare__title { font-weight: 800; letter-spacing: -.05em; font-size: clamp(64px, 11vw, 170px); line-height: .85; margin: 0 0 18px; }
 .compare__list { list-style: none; margin: 0; padding: 0; font-size: clamp(15px, 1.5vw, 19px); font-weight: 600; display: grid; gap: 8px; }
@@ -244,8 +250,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .expert__placeholder { position: absolute; top: 14px; left: 14px; right: 14px; background: rgba(255,255,255,.85); border-radius: 10px; padding: 10px 12px; font-size: 13px; font-weight: 600; }
 .badge-spin { position: absolute; top: -46px; right: -40px; width: 130px; height: 130px; animation: rotator 14s linear infinite; z-index: 2; }
 .badge-spin text { font-size: 11.5px; font-weight: 700; letter-spacing: 2.4px; text-transform: uppercase; }
-.expert__mark { margin-top: 30px; width: 110px; height: 110px; position: relative; perspective: 500px; }
-.expert__mark .cube { --s: 70px; left: 20px; top: 20px; }
+.expert__icons { display: flex; gap: 22px; margin-top: 34px; color: var(--ink); }
+.expert__icons span { width: 46px; height: 46px; }
 @media (max-width: 860px) { .expert { grid-template-columns: 1fr; } .badge-spin { right: 6px; top: -50px; } }
 
 /* ---------- testimonials ---------- */
@@ -254,7 +260,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .review { scroll-snap-align: start; border: 12px solid var(--accent); background: var(--paper); padding: clamp(20px, 3vw, 34px); display: flex; flex-direction: column; gap: 26px; min-height: 470px; }
 .review__stars { display: flex; align-items: center; gap: 8px; font-weight: 700; }
 .review__stars svg { width: 18px; height: 18px; }
-.review__quote { font-weight: 700; font-size: clamp(22px, 2.3vw, 30px); line-height: 1.02; text-transform: uppercase; letter-spacing: -.02em; margin: 0; flex: 1; }
+.review__quote { font-family: var(--display); font-stretch: 85%; font-weight: 500; font-size: clamp(26px, 2.8vw, 38px); line-height: 1.1; margin: 0; flex: 1; }
+.review__quote::before { content: "\201C"; display: block; font-size: 2.4em; line-height: .6; color: var(--accent); margin-bottom: 4px; }
 .review__foot { display: flex; justify-content: space-between; gap: 14px; align-items: end; flex-wrap: wrap; }
 .review__who { display: grid; grid-template-columns: 44px 1fr; gap: 0 10px; align-items: center; font-size: 14px; }
 .review__who .avatar { grid-row: span 2; width: 44px; height: 44px; border-radius: 50%; background: var(--ink); color: var(--accent); display: grid; place-items: center; font-weight: 800; }
@@ -272,7 +279,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .ugc:hover .ugc__track { animation-play-state: paused; }
 .ugc__tile { position: relative; width: 210px; aspect-ratio: .78; border-radius: 16px; overflow: hidden; background: linear-gradient(160deg, var(--t1), var(--t2)); display: grid; place-items: center; flex: none; }
 .ugc__tile .pouch { --w: 50%; }
-.ugc__tile .stick { --w: 22%; }
+.ugc__tile .stick { --w: 40px; }
 .ugc__tile .tag { position: absolute; left: 10px; bottom: 10px; background: var(--paper); border-radius: 999px; font-size: 11px; font-weight: 700; padding: 4px 9px; }
 .ugc__tile .big { position: absolute; top: 10px; left: 12px; right: 12px; color: var(--paper); font-weight: 800; font-size: 30px; letter-spacing: -.04em; line-height: .9; }
 
@@ -446,9 +453,43 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .sticky-atc__name small { display: block; font-weight: 500; color: var(--muted); text-transform: none; }
 
 /* Editorial condensed serif for every display headline, like the pack */
-.h-xl, .h-lg, .h-md, .hero__word, .first__line, .first__ever, .stat__num, .compare__title, .ticker__item, .review__quote, .buy__title, .mobile-nav a, .ugc__tile .big, .drawer__total, .code-box {
+.h-xl, .h-lg, .h-md, .hero__word, .first__line, .first__ever, .stat__num, .compare__title, .ticker__item, .buy__title, .mobile-nav a, .ugc__tile .big, .drawer__total, .code-box {
   font-family: var(--display); font-stretch: 72%; font-weight: 700; letter-spacing: -.012em;
 }
+
+/* ---------- the ritual (illustrated 3-step) ---------- */
+.ritual__head { text-align: center; margin-bottom: clamp(30px, 4vw, 50px); }
+.ritual__head .h-xl { margin-top: 10px; }
+.ritual__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.ritual__card p { margin: 8px 0 0; line-height: 1.55; color: #3d4a40; max-width: 360px; }
+.ritual__num { display: block; margin: 18px 0 4px; font-weight: 800; font-size: 13px; letter-spacing: .14em; color: var(--accent-dark); }
+.ritual__art { position: relative; aspect-ratio: 1; border-radius: var(--radius); overflow: hidden; display: grid; place-items: center; }
+.ritual__note { position: absolute; left: 14px; bottom: 12px; background: var(--paper); color: var(--ink); border-radius: 999px; font-size: 12px; font-weight: 700; padding: 5px 11px; text-transform: uppercase; letter-spacing: .06em; }
+/* 01: the real sachet, tearing open at the notch */
+.ritual__art--tear { background: radial-gradient(70% 60% at 50% 45%, #F6E3B4, #E2A93B 75%, #C98A2E); }
+.tear { position: relative; width: 30%; aspect-ratio: .459; transform: rotate(-8deg); filter: drop-shadow(0 22px 20px rgba(60,30,0,.3)); }
+.tear__body, .tear__cap { position: absolute; inset: 0; background: var(--sachet) center / contain no-repeat; }
+.tear__body { clip-path: polygon(0 10.6%, 14% 9.8%, 27% 11%, 41% 9.6%, 55% 11.1%, 70% 9.7%, 84% 10.9%, 100% 10.2%, 100% 100%, 0 100%); }
+.tear__cap { clip-path: polygon(0 0, 100% 0, 100% 10.2%, 84% 10.9%, 70% 9.7%, 55% 11.1%, 41% 9.6%, 27% 11%, 14% 9.8%, 0 10.6%); transform-origin: 100% 10%; animation: tearOff 3.4s var(--ease) infinite alternate; }
+@keyframes tearOff { 0%, 25% { transform: none; } 100% { transform: translate(16%, -14%) rotate(24deg); } }
+/* 02: the sachet sliding into a shorts pocket */
+.ritual__art--pocket { background: linear-gradient(160deg, #EFE4CC, #D9C69E); }
+.pocket { position: absolute; width: 64%; left: 18%; bottom: 4%; z-index: 2; filter: drop-shadow(0 -4px 6px rgba(80,60,20,.12)); }
+.pocket__fill { fill: #C9B386; }
+.pocket__stitch { fill: none; stroke: #F4EBD6; stroke-width: 2; stroke-dasharray: 5 5; }
+.pocket__hem { fill: none; stroke: #A8925F; stroke-width: 3; }
+.pocket__rivet { fill: #B88A3A; stroke: #8C6526; stroke-width: 1.4; }
+.pocket__sachet { position: absolute; z-index: 1; width: 21%; aspect-ratio: .459; left: 40%; top: 12%; background: var(--sachet) center / contain no-repeat; filter: drop-shadow(0 10px 10px rgba(0,0,0,.25)); animation: pocketIn 3.8s ease-in-out infinite; }
+@keyframes pocketIn { 0%, 100% { transform: translateY(0) rotate(5deg); } 50% { transform: translateY(16%) rotate(-3deg); } }
+/* 03: a route with a fuel stop every 30 minutes */
+.ritual__art--move { background: linear-gradient(160deg, #2F5A3F, #16301F); }
+.route { width: 100%; height: 100%; }
+.route__contours path { fill: none; stroke: rgba(247,241,228,.14); stroke-width: 1.2; }
+.route__line { fill: none; stroke: var(--accent); stroke-width: 4; stroke-linecap: round; stroke-dasharray: 2 10; animation: routeRun 1.6s linear infinite; }
+@keyframes routeRun { to { stroke-dashoffset: -24; } }
+.route__mark circle { fill: var(--paper); stroke: var(--accent); stroke-width: 3; }
+.route__mark text { fill: var(--paper); font: 700 15px var(--font); }
+@media (max-width: 860px) { .ritual__grid { grid-template-columns: 1fr; max-width: 460px; margin-inline: auto; } }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
