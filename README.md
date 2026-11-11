@@ -1,13 +1,14 @@
-# SOLT: demand-test storefront
+# Honeyworth: demand-test storefront
 
-A static site for a fictional electrolyte brand (SOLT). It uses the same page structure and selling approach as a modern Shopify supplement store. It's built to test **whether people would buy** before you make any product.
+A static site for **Honeyworth Energy Gel** (honey + maple syrup + sea salt). It uses the same page structure and selling approach as a modern Shopify supplement store. It's built to test **whether people would buy** before you scale production (see the Sales Strategy Playbook: the ~500-box pilot).
 
 Visitors browse, pick a flavor, add to cart and hit **Checkout**. Checkout opens a "first batch isn't shipping yet" screen that collects their email. No payment is taken. Every step is tracked, so you can measure real purchase intent.
 
 ## Files
-- `index.html`: home page. Hero slider, ticker, product carousel with quick view, "first cold brew electrolyte" banner, sea-salt blobs, 1000mg stat, neon-vs-salt drag slider, expert block, reviews, UGC strip.
-- `product.html?id=yuzu|watermelon|coldbrew|night|endure`: product page. Draggable 3D pouch gallery, pack size, subscribe & save, comparison table, science section, FAQ, sticky add-to-cart bar.
-- `assets/data.js`: **all products, prices, flavors and colors.** Edit this to change the offer.
+- `index.html`: home page. Hero slider, ticker, product carousel with quick view, "honey. maple. sea salt. that's it." banner with honey drip, three-ingredient blobs, 30g stat, more-vs-less drag slider, expert block, reviews, UGC strip.
+- `product.html?id=original|run|ride|match|move`: product page. Draggable 3D sachet (spin it to see the back of the pack), pack size, subscribe & save, comparison table, "every 30 minutes" section, FAQ, sticky add-to-cart bar.
+- `assets/data.js`: **all products, prices and colors.** Every product is the same gel boxed for a different audience (run / ride / match / everyday), so checkouts per product double as the playbook's audience test.
+- `assets/img/`: the real packaging art (`hw-front.webp`, `hw-back.webp`, `hw-label.webp`) and the wordmark (`hw-wordmark.png`). Every 3D element on the site is built from these.
 - `config.js`: pixel IDs, webhook URL, free-shipping threshold, discount code.
 - `assets/app.js`, `assets/styles.css`: the engine (no build step, no dependencies).
 
@@ -42,11 +43,11 @@ Visitors browse, pick a flavor, add to cart and hit **Checkout**. Checkout opens
 
 UTM tags (`?utm_source=meta&utm_campaign=...`) are saved on the first visit and attached to every event, so you can compare ad angles.
 
-**Reading the results:** compare checkout rate (begin_checkout ÷ unique visitors) and emails left at checkout across ad sets. Also look at which flavor gets the most checkouts and whether people pick the 30-pack or subscribe.
+**Reading the results:** compare checkout rate (begin_checkout ÷ unique visitors) and emails left at checkout across ad sets. Also look at which box (run / ride / match / everyday) gets the most checkouts, which answer people pick in the "how do you move?" popup, and whether they pick the 40-pack or subscribe.
 
 ## Run locally
 ```bash
-python -m http.server 5180 --directory C:/Users/Shayan/solt-demand-test
+python -m http.server 5180
 ```
 Then open http://localhost:5180. Add `#debug` to the URL to log events in the console.
 

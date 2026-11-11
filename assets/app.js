@@ -1,6 +1,6 @@
 (() => {
-  const CFG = window.SOLT_CONFIG || {};
-  const PRODUCTS = window.SOLT_PRODUCTS || [];
+  const CFG = window.HW_CONFIG || {};
+  const PRODUCTS = window.HW_PRODUCTS || [];
   const byId = (id) => PRODUCTS.find((p) => p.id === id) || PRODUCTS[0];
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
@@ -20,7 +20,7 @@
     left: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m15 5-7 7 7 7"/></svg>',
     right: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m9 5 7 7-7 7"/></svg>',
     star: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3 6.6 7.2.8-5.4 4.9 1.5 7.1L12 17.8 5.7 21.4l1.5-7.1L1.8 9.4 9 8.6z"/></svg>',
-    check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><circle cx="12" cy="12" r="10" fill="#111" stroke="none"/><path d="m7.5 12.5 3 3 6-6.5" stroke="#d6ff3a"/></svg>',
+    check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><circle cx="12" cy="12" r="10" fill="#16301F" stroke="none"/><path d="m7.5 12.5 3 3 6-6.5" stroke="#E2A93B"/></svg>',
     x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="10" stroke-width="2"/><path d="m9 9 6 6m0-6-6 6"/></svg>',
     spark: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c.6 6.4 5.6 11.4 12 12-6.4.6-11.4 5.6-12 12-.6-6.4-5.6-11.4-12-12C6.4 11.4 11.4 6.4 12 0Z"/></svg>',
     ig: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>',
@@ -29,34 +29,28 @@
     loop: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/></svg>',
     shield: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg>',
   };
-  const cubeHTML = (cls = "") => `<div class="cube ${cls}"><i></i><i></i><i></i><i></i><i></i><i></i></div>`;
+  const LOGO = `<span class="logo__mark" role="img" aria-label="Honeyworth"></span>`;
 
-  /* ================= 3D product renders ================= */
-  const vars = (p) => `--bag:${p.bag};--band:${p.band};--bandInk:${p.bandInk};--ink:${p.ink}`;
+  /* ================= 3D product renders =================
+     Every 3D object is the real Honeyworth sachet: front + back packaging art,
+     with a stack of silhouette layers between them for thickness. */
   function pouch(p, style = "") {
-    return `<div class="pouch" style="${vars(p)};${style}">
-      <div class="pouch__side"></div>
-      <div class="pouch__body">
-        <div class="pouch__band"><span>${p.bandText}</span></div>
-        <div class="pouch__brand">SOLT</div>
-        <div class="pouch__meta">${p.meta}</div>
-        <ul class="pouch__ingr">${p.ingr.map((i) => `<li>${i}</li>`).join("")}</ul>
-        <div class="pouch__badge">${p.badge}</div>
-        <div class="pouch__word">${p.word}</div>
-        <div class="pouch__gloss"></div>
-      </div>
+    return `<div class="pouch" style="${style}" role="img" aria-label="Honeyworth Energy Gel sachet">
+      <div class="pouch__edge"></div><div class="pouch__edge"></div><div class="pouch__edge"></div><div class="pouch__edge"></div><div class="pouch__edge"></div>
+      <div class="pouch__back"></div>
+      <div class="pouch__body"><div class="pouch__gloss"></div></div>
       <div class="pouch__shadow"></div>
     </div>`;
   }
-  const stick = (p, style = "") => `<div class="stick" style="${vars(p)};${style}"><span>${p.word}</span></div>`;
+  const stick = (p, style = "", back = false) => `<div class="stick${back ? " stick--back" : ""}" style="${style}"></div>`;
 
   /* ================= tracking ================= */
-  const sid = (() => { let s = sessionStorage.getItem("solt_sid"); if (!s) { s = Math.random().toString(36).slice(2, 10); sessionStorage.setItem("solt_sid", s); } return s; })();
+  const sid = (() => { let s = sessionStorage.getItem("hw_sid"); if (!s) { s = Math.random().toString(36).slice(2, 10); sessionStorage.setItem("hw_sid", s); } return s; })();
   const utm = (() => {
     const q = new URLSearchParams(location.search), out = {};
     ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "fbclid", "ttclid", "gclid"].forEach((k) => q.get(k) && (out[k] = q.get(k)));
-    if (Object.keys(out).length) store.set("solt_utm", out);
-    return Object.keys(out).length ? out : store.get("solt_utm", {});
+    if (Object.keys(out).length) store.set("hw_utm", out);
+    return Object.keys(out).length ? out : store.get("hw_utm", {});
   })();
   const META_MAP = { view_item: "ViewContent", add_to_cart: "AddToCart", begin_checkout: "InitiateCheckout", generate_lead: "Lead", sign_up: "CompleteRegistration" };
   function track(event, data = {}) {
@@ -69,10 +63,10 @@
       const body = new Blob([JSON.stringify(payload)], { type: "text/plain" });
       if (!(navigator.sendBeacon && navigator.sendBeacon(CFG.WEBHOOK_URL, body))) fetch(CFG.WEBHOOK_URL, { method: "POST", body, mode: "no-cors", keepalive: true }).catch(() => {});
     }
-    const log = store.get("solt_events", []); log.push(payload); store.set("solt_events", log.slice(-300));
+    const log = store.get("hw_events", []); log.push(payload); store.set("hw_events", log.slice(-300));
     if (location.hash === "#debug") console.log("[track]", payload);
   }
-  window.soltTrack = track;
+  window.hwTrack = track;
 
   function loadPixels() {
     if (CFG.META_PIXEL_ID) {
@@ -89,20 +83,20 @@
   }
 
   /* ================= cart ================= */
-  let cart = store.get("solt_cart", []);
+  let cart = store.get("hw_cart", []);
   const unit = (l) => byId(l.id).price[l.pack] * (l.sub ? 1 - CFG.SUBSCRIBE_DISCOUNT : 1);
   const subtotal = () => cart.reduce((s, l) => s + unit(l) * l.qty, 0);
   const count = () => cart.reduce((s, l) => s + l.qty, 0);
-  function addToCart(id, pack = 15, sub = true, qty = 1, source = "") {
+  function addToCart(id, pack = 20, sub = true, qty = 1, source = "") {
     const hit = cart.find((l) => l.id === id && l.pack === pack && l.sub === sub);
     hit ? (hit.qty += qty) : cart.push({ id, pack, sub, qty });
-    store.set("solt_cart", cart);
+    store.set("hw_cart", cart);
     const p = byId(id);
     track("add_to_cart", { product: id, pack, subscribe: sub, qty, value: +(p.price[pack] * (sub ? 1 - CFG.SUBSCRIBE_DISCOUNT : 1) * qty).toFixed(2), ids: [id], source });
     renderCart(); openDrawer();
     const c = $(".cart-count"); c.classList.remove("bump"); void c.offsetWidth; c.classList.add("bump");
   }
-  function setQty(i, q) { if (q <= 0) cart.splice(i, 1); else cart[i].qty = q; store.set("solt_cart", cart); renderCart(); }
+  function setQty(i, q) { if (q <= 0) cart.splice(i, 1); else cart[i].qty = q; store.set("hw_cart", cart); renderCart(); }
 
   function renderCart() {
     const c = $(".cart-count"); c.textContent = count(); c.classList.toggle("has", count() > 0);
@@ -110,16 +104,16 @@
     $("#drawer-ship").innerHTML = left > 0 ? `You're <b>${money(left)}</b> away from free shipping<div class="bar"><i style="width:${(subtotal() / CFG.FREE_SHIPPING_THRESHOLD) * 100}%"></i></div>` : `<b>You've unlocked free shipping.</b><div class="bar"><i style="width:100%"></i></div>`;
     const items = $("#drawer-items");
     if (!cart.length) {
-      items.innerHTML = `<div class="drawer__empty"><p class="h-md">Your bag is empty</p><p style="color:var(--muted)">Salt is calling.</p><a class="btn btn--dark" href="product.html?id=yuzu">Shop best seller</a></div>`;
+      items.innerHTML = `<div class="drawer__empty"><p class="h-md">Your bag is empty</p><p style="color:var(--muted)">Your next session is calling.</p><a class="btn btn--dark" href="product.html?id=original">Shop best seller</a></div>`;
     } else {
       items.innerHTML = cart.map((l, i) => { const p = byId(l.id); return `<div class="line-item">
         <a class="line-item__media" href="product.html?id=${p.id}">${pouch(p)}</a>
-        <div><h5>${p.name}</h5><small>${l.pack} sticks · ${l.sub ? "Subscribe & save, every 30 days" : "One-time purchase"}</small>
+        <div><h5>${p.name}</h5><small>${l.pack} sachets · ${l.sub ? "Subscribe & save, every 30 days" : "One-time purchase"}</small>
           <div class="qty"><button data-q="${i}" data-d="-1" aria-label="Decrease">−</button><span>${l.qty}</span><button data-q="${i}" data-d="1" aria-label="Increase">+</button></div></div>
         <div class="line-item__price">${money(unit(l) * l.qty)}${l.sub ? `<s>${money(p.price[l.pack] * l.qty)}</s>` : ""}</div></div>`; }).join("");
     }
     const upsellP = PRODUCTS.find((p) => !cart.some((l) => l.id === p.id));
-    $("#drawer-upsell").innerHTML = upsellP && cart.length ? `<div class="fine" style="margin-bottom:8px;font-weight:700;color:var(--ink)">PAIRS WELL WITH</div><div class="upsell">${pouch(upsellP)}<div class="upsell__text"><b>${upsellP.short}</b>${money(upsellP.price[15] * (1 - CFG.SUBSCRIBE_DISCOUNT))} with subscribe</div><button class="btn btn--dark" data-upsell="${upsellP.id}">+ Add</button></div>` : "";
+    $("#drawer-upsell").innerHTML = upsellP && cart.length ? `<div class="fine" style="margin-bottom:8px;font-weight:700;color:var(--ink)">PAIRS WELL WITH</div><div class="upsell">${pouch(upsellP)}<div class="upsell__text"><b>${upsellP.short}</b>${money(upsellP.price[20] * (1 - CFG.SUBSCRIBE_DISCOUNT))} with subscribe</div><button class="btn btn--dark" data-upsell="${upsellP.id}">+ Add</button></div>` : "";
     $("#drawer-total").innerHTML = `<span>Subtotal</span><span>${money(subtotal())}</span>`;
     $("#checkout-btn").disabled = !cart.length;
   }
@@ -129,13 +123,13 @@
 
   /* ================= shared chrome ================= */
   function chrome(overlay) {
-    const nav = `<a href="index.html#shop">Shop all</a><a href="product.html?id=yuzu">Hydration</a><a href="product.html?id=coldbrew">Focus</a><a href="product.html?id=night">Sleep</a><a href="index.html#science">Science</a>`;
+    const nav = `<a href="index.html#shop">Shop all</a><a href="product.html?id=run">Run</a><a href="product.html?id=ride">Ride</a><a href="product.html?id=match">Match</a><a href="index.html#science">Ingredients</a>`;
     document.body.insertAdjacentHTML("afterbegin", `
-      <div class="announce"><div class="announce__track"><span>Free shipping on orders $${CFG.FREE_SHIPPING_THRESHOLD}+</span><span>Subscribe &amp; save ${Math.round(CFG.SUBSCRIBE_DISCOUNT * 100)}% on every order</span><span>Zero sugar · Real sea salt · Made in the USA</span></div></div>
+      <div class="announce"><div class="announce__track"><span>Free shipping on orders $${CFG.FREE_SHIPPING_THRESHOLD}+</span><span>Subscribe &amp; save ${Math.round(CFG.SUBSCRIBE_DISCOUNT * 100)}% on every order</span><span>Honey · Maple · Sea salt · Nothing artificial</span></div></div>
       <header class="header ${overlay ? "header--overlay" : "is-solid"}">
         <div class="header__inner">
           <div class="header__left"><button class="icon-btn menu-btn" data-open-nav aria-label="Menu">${I.menu}</button><nav class="nav-links">${nav}</nav></div>
-          <a class="logo" href="index.html" aria-label="SOLT home"><span class="logo__cube">${cubeHTML()}</span>SOLT</a>
+          <a class="logo" href="index.html" aria-label="Honeyworth home">${LOGO}</a>
           <div class="header__right"><button class="icon-btn" aria-label="Search" data-soon>${I.search}</button><button class="icon-btn" aria-label="Account" data-soon>${I.user}</button><button class="icon-btn" aria-label="Cart" data-open-cart>${I.bag}<span class="cart-count">0</span></button></div>
         </div>
       </header>
@@ -145,13 +139,13 @@
       <section class="connect"><h2 class="h-lg"><span class="underline-draw reveal-trigger">CONNECT WITH US!</span></h2>
         <div class="socials"><a class="icon-btn" href="#" aria-label="Instagram" data-soon>${I.ig}</a><a class="icon-btn" href="#" aria-label="TikTok" data-soon>${I.tt}</a></div></section>
       <footer class="footer"><div class="wrap">
-        <div class="footer__signup"><p>Drop your email. Be first to know about new flavors, restocks and members-only drops.</p>
+        <div class="footer__signup"><p>Drop your email. Be first to know about restocks, club sessions and members-only drops.</p>
           <form class="inline-form" data-lead="footer"><input type="email" required placeholder="Email address" aria-label="Email"><button class="btn btn--dark">Sign Up</button></form></div>
         <div class="footer__cols">
-          <div><h4>Salt, solved.</h4><p>SOLT makes clean electrolyte sticks with real sea salt, real fruit and nothing your body has to decode. Built for athletes, early mornings, long flights and everyone who's just a little bit thirsty.</p></div>
+          <div><h4>Real fuel. Real movement.</h4><p>Honeyworth makes real-food performance fuel from honey, maple syrup and sea salt. One sachet, three ingredients, nothing to overthink. Built for runners, cyclists, team-sport athletes and anyone who moves.</p></div>
           <div><h4>Quick links</h4><ul><li><a href="#" data-soon>Contact us</a></li><li><a href="#" data-soon>Become an ambassador</a></li><li><a href="#" data-soon>Wholesale</a></li><li><a href="#" data-soon>Manage subscription</a></li><li><a href="#" data-soon>Shipping policy</a></li><li><a href="#" data-soon>Refund policy</a></li></ul></div>
         </div>
-        <div class="footer__bottom"><span>© ${new Date().getFullYear()} SOLT. These statements have not been evaluated by the FDA. This product is not intended to diagnose, treat, cure, or prevent any disease.</span>
+        <div class="footer__bottom"><span>© ${new Date().getFullYear()} Honeyworth Brands. Fuel the good life. @thehoneyworth</span>
           <div class="pay"><span>VISA</span><span>MC</span><span>AMEX</span><span>PAYPAL</span><span>APPLE PAY</span><span>G PAY</span><span>SHOP PAY</span></div></div>
       </div></footer>
 
@@ -165,11 +159,11 @@
       </aside>
 
       <div class="modal" id="waitlist" role="dialog" aria-modal="true" aria-label="Reserve your order"><div class="modal__card"><button class="icon-btn modal__close" data-close aria-label="Close">${I.close}</button>
-        <div class="split"><div class="split__art"><div class="cubes" data-cubes="5"></div><div class="tilt floaty">${pouch(byId("yuzu"))}</div></div>
+        <div class="split"><div class="split__art"><div class="cubes" data-cubes="5"></div><div class="tilt floaty">${pouch(byId("original"))}</div></div>
         <div class="split__body" id="waitlist-body"></div></div></div></div>
 
       <div class="modal" id="popup" role="dialog" aria-modal="true" aria-label="Discount offer"><div class="modal__card"><button class="icon-btn modal__close" data-close aria-label="Close">${I.close}</button>
-        <div class="split"><div class="split__art" style="background:linear-gradient(160deg,#d6ff3a,#7fd0ff)"><div class="cubes" data-cubes="6"></div><div class="tilt floaty">${pouch(byId("watermelon"))}</div></div>
+        <div class="split"><div class="split__art" style="background:linear-gradient(160deg,#E2A93B,#2F5A3F)"><div class="cubes" data-cubes="6"></div><div class="tilt floaty">${pouch(byId("run"))}</div></div>
         <div class="split__body" id="popup-body"></div></div></div></div>
 
       <div class="modal" id="quickview" role="dialog" aria-modal="true" aria-label="Quick view"><div class="modal__card"><button class="icon-btn modal__close" data-close aria-label="Close">${I.close}</button><div id="qv-body"></div></div></div>
@@ -201,7 +195,7 @@
       <h3 class="h-lg" style="font-size:clamp(32px,4vw,46px)">Our first batch isn't shipping yet.</h3>
       <p style="margin:0;line-height:1.5">We've saved your ${money(value)} bag. Leave your email and you'll get first access at launch, plus <b>30% off</b> and free shipping on this order. No payment taken today.</p>
       <form data-lead="checkout" style="display:grid;gap:10px;margin-top:6px"><input class="field" type="email" required placeholder="you@email.com" aria-label="Email"><button class="btn btn--accent btn--block">Reserve my order</button></form>
-      <p class="fine">We'll only email you about SOLT. Unsubscribe anytime.</p>`;
+      <p class="fine">We'll only email you about Honeyworth. Unsubscribe anytime.</p>`;
     openModal("waitlist");
   }
 
@@ -210,13 +204,13 @@
     if (!email) return;
     const src = form.dataset.lead;
     const extra = src === "checkout" ? { value: +subtotal().toFixed(2), items: cart.map((l) => `${l.id}x${l.qty}`).join(",") } : {};
-    if (src === "popup") extra.goal = store.get("solt_goal", "");
+    if (src === "popup") extra.goal = store.get("hw_goal", "");
     track("generate_lead", { email, source: src, ...extra });
-    store.set("solt_lead", email);
+    store.set("hw_lead", email);
     if (src === "checkout") {
-      $("#waitlist-body").innerHTML = `<h3 class="h-lg" style="font-size:clamp(32px,4vw,46px)">You're on the list.</h3><p style="line-height:1.5;margin:0">Your bag is reserved. We'll email <b>${email.replace(/</g, "")}</b> the moment SOLT ships, with your 30% code attached.</p><button class="btn btn--dark btn--block" data-close>Keep browsing</button>`;
+      $("#waitlist-body").innerHTML = `<h3 class="h-lg" style="font-size:clamp(32px,4vw,46px)">You're on the list.</h3><p style="line-height:1.5;margin:0">Your bag is reserved. We'll email <b>${email.replace(/</g, "")}</b> the moment Honeyworth ships, with your 30% code attached.</p><button class="btn btn--dark btn--block" data-close>Keep browsing</button>`;
     } else if (src === "popup") {
-      $("#popup-body").innerHTML = `<div class="logo" style="justify-content:center">SOLT</div><h3 class="h-lg" style="font-size:clamp(30px,3.6vw,44px)">Here's your code</h3><div class="code-box">${CFG.POPUP_DISCOUNT_CODE}</div><p class="fine">Applies automatically at checkout. Free shipping included.</p><button class="btn btn--dark btn--block" data-close>Start shopping</button>`;
+      $("#popup-body").innerHTML = `<div class="logo" style="justify-content:center">${LOGO}</div><h3 class="h-lg" style="font-size:clamp(30px,3.6vw,44px)">Here's your code</h3><div class="code-box">${CFG.POPUP_DISCOUNT_CODE}</div><p class="fine">Applies automatically at checkout. Free shipping included.</p><button class="btn btn--dark btn--block" data-close>Start shopping</button>`;
     } else {
       form.innerHTML = `<p style="margin:12px auto;font-weight:700">You're in. Watch your inbox.</p>`;
     }
@@ -224,28 +218,28 @@
 
   /* ================= discount popup ================= */
   function popup() {
-    if (store.get("solt_popup_seen", false) || store.get("solt_lead", "")) return;
+    if (store.get("hw_popup_seen", false) || store.get("hw_lead", "")) return;
     setTimeout(() => {
       if ($(".modal.open, .drawer.open")) return;
-      store.set("solt_popup_seen", true);
-      $("#popup-body").innerHTML = `<div class="logo" style="justify-content:center;font-size:22px">SOLT</div>
+      store.set("hw_popup_seen", true);
+      $("#popup-body").innerHTML = `<div class="logo" style="justify-content:center">${LOGO}</div>
         <h3 class="h-lg" style="font-size:clamp(32px,3.8vw,48px)">You've got up to <br>30% off</h3><div class="h-md">+ free shipping</div>
-        <p class="fine" style="color:var(--ink)">To claim your discount... what's your main goal?</p>
-        <div class="goal-btns"><button data-goal="hydration">Hydration &amp; recovery</button><button data-goal="focus">Energy &amp; focus</button><button data-goal="sleep">Better sleep</button><button data-goal="endurance">Endurance</button></div>`;
+        <p class="fine" style="color:var(--ink)">To claim your discount... how do you move?</p>
+        <div class="goal-btns"><button data-goal="running">Running</button><button data-goal="cycling">Cycling</button><button data-goal="team_sport">Soccer &amp; team sport</button><button data-goal="everyday">Everyday movement</button></div>`;
       openModal("popup"); track("popup_view");
     }, CFG.POPUP_DELAY_MS);
   }
 
   /* ================= quick view ================= */
   function quickView(id) {
-    const p = byId(id); let pack = 15;
+    const p = byId(id); let pack = 20;
     track("quick_view", { product: id, ids: [id] });
     const render = () => {
       $("#qv-body").innerHTML = `<div class="qv"><div class="qv__media tilt" data-tilt>${pouch(p)}</div><div class="qv__body">
-        <div class="buy__brand">SOLT</div><h3 class="buy__title" style="font-size:36px;margin:0">${p.name}</h3>
+        <div class="buy__brand">HONEYWORTH</div><h3 class="buy__title" style="font-size:36px;margin:0">${p.name}</h3>
         <div class="buy__price">${money(p.price[pack] * (1 - CFG.SUBSCRIBE_DISCOUNT))} <s>${money(p.price[pack])}</s></div>
         <p style="margin:0;line-height:1.5">${p.oneLiner}</p>
-        <div class="packs">${[15, 30].map((n) => `<button class="pack ${n === pack ? "is-active" : ""}" data-qv-pack="${n}"><b>${n} sticks</b><small>${money(p.price[n])}</small>${n === 30 ? `<span class="save">save ${saving(p)}%</span>` : ""}</button>`).join("")}</div>
+        <div class="packs">${[20, 40].map((n) => `<button class="pack ${n === pack ? "is-active" : ""}" data-qv-pack="${n}"><b>${n} sachets</b><small>${money(p.price[n])}</small>${n === 40 ? `<span class="save">save ${saving(p)}%</span>` : ""}</button>`).join("")}</div>
         <button class="btn btn--dark btn--block" data-qv-add>Add to cart · subscribe &amp; save</button>
         <a href="product.html?id=${p.id}" style="text-align:center;font-weight:700;font-size:14px">View full details</a></div></div>`;
       bindTilt($("#qv-body"));
@@ -256,8 +250,8 @@
       if (e.target.closest("[data-qv-add]")) { closeAll(); addToCart(p.id, pack, true, 1, "quick_view"); }
     };
   }
-  const saving = (p) => Math.round((1 - p.price[30] / (p.price[15] * 2)) * 100);
-  const range = (p) => `${money(p.price[15] * (1 - CFG.SUBSCRIBE_DISCOUNT))} – ${money(p.price[30])}`;
+  const saving = (p) => Math.round((1 - p.price[40] / (p.price[20] * 2)) * 100);
+  const range = (p) => `${money(p.price[20] * (1 - CFG.SUBSCRIBE_DISCOUNT))} – ${money(p.price[40])}`;
 
   /* ================= motion helpers ================= */
   function bindTilt(root = document) {
@@ -265,9 +259,9 @@
       if (el._tilt) return; el._tilt = true;
       el.addEventListener("pointermove", (e) => {
         const r = el.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
-        $$(".pouch", el).forEach((p) => { p.style.setProperty("--ry", x * 46 + "deg"); p.style.setProperty("--rx", -y * 20 + "deg"); });
+        $$(".pouch", el).filter((p) => !p.closest("[data-drag]")).forEach((p) => { p.style.setProperty("--ry", x * 46 + "deg"); p.style.setProperty("--rx", -y * 20 + "deg"); });
       });
-      el.addEventListener("pointerleave", () => $$(".pouch", el).forEach((p) => { p.style.removeProperty("--ry"); p.style.removeProperty("--rx"); }));
+      el.addEventListener("pointerleave", () => $$(".pouch", el).filter((p) => !p.closest("[data-drag]")).forEach((p) => { p.style.removeProperty("--ry"); p.style.removeProperty("--rx"); }));
     });
   }
   function splitWords() {
@@ -286,7 +280,7 @@
 
   /* ================= home page ================= */
   function cardHTML(p, i) {
-    return `<div class="card"><div class="card__wrap"><a href="product.html?id=${p.id}" class="card__media" style="--glow:${p.accent}" data-tilt>${i === 0 ? '<span class="card__badge">Best seller</span>' : p.id === "coldbrew" ? '<span class="card__badge">New</span>' : ""}${pouch(p)}</a>
+    return `<div class="card"><div class="card__wrap"><a href="product.html?id=${p.id}" class="card__media" style="--glow:${p.accent}" data-tilt>${i === 0 ? '<span class="card__badge">Best seller</span>' : p.id === "match" ? '<span class="card__badge">New</span>' : ""}${pouch(p)}</a>
       <div class="card__quick"></div></div>
       <a href="product.html?id=${p.id}" style="text-decoration:none"><h3 class="card__name">${p.name}</h3><div class="card__price">From <b>${range(p)}</b></div></a></div>`;
   }
@@ -325,24 +319,25 @@
     $$("#products .card").forEach((c, i) => ($(".card__quick", c).innerHTML = `<button class="btn btn--white btn--block" data-quick="${PRODUCTS[i].id}" style="padding:12px">Quick View</button>`));
 
     // "first" banner
-    const cb = byId("coldbrew");
+    const cb = byId("original");
     $("#first-product").innerHTML = `<div class="tilt floaty">${pouch(cb)}</div>`;
 
     // crystals
-    $("#crystals").innerHTML = PRODUCTS.map((p) => `<a class="crystal" href="product.html?id=${p.id}"><span class="crystal__blob" style="--b1:${p.blob[0]};--b2:${p.blob[1]}"></span><b>${p.short}</b><small>${p.bandText.toLowerCase()}</small></a>`).join("");
+    const ingredients = [["Honey", "canadian", "#F6C75E", "#B8741A"], ["Maple syrup", "organic canadian", "#D98B3A", "#7A3A12"], ["Sea salt", "pink himalayan", "#F7DCD6", "#C98C86"]];
+    $("#crystals").innerHTML = ingredients.map(([n, s, b1, b2]) => `<a class="crystal" href="product.html?id=original"><span class="crystal__blob" style="--b1:${b1};--b2:${b2}"></span><b>${n}</b><small>${s}</small></a>`).join("");
 
     // comparison slider
     const cmp = $("#compare");
     $("input", cmp).addEventListener("input", (e) => cmp.style.setProperty("--pos", e.target.value + "%"));
-    $("#compare-sticks").innerHTML = PRODUCTS.slice(0, 3).map((p, i) => stick(p, `--w:${44 + i * 6}px;left:${14 + i * 9}%;bottom:${-6 + i * 4}%;transform:rotate(${-14 + i * 12}deg)`)).join("");
+    $("#compare-sticks").innerHTML = PRODUCTS.slice(0, 3).map((p, i) => stick(p, `--w:${44 + i * 6}px;left:${14 + i * 9}%;bottom:${-6 + i * 4}%;transform:rotate(${-14 + i * 12}deg)`, i === 1)).join("");
 
     // reviews (SAMPLE copy: replace with real customer reviews before you run ads)
     const reviews = [
-      ["I drink a gallon a day and still got headaches on long shifts. One yuzu stick at lunch and that's gone. Tastes like a fancy soda.", "Maya R.", "ICU nurse", "yuzu"],
-      ["Cold brew + salt sounded insane. Now it's my pre-lift every single morning. Focused, not jittery, and no 2pm crash.", "Dre T.", "Powerlifter", "coldbrew"],
-      ["The night stick is the first magnesium thing I actually look forward to. Warm water, lights off, done.", "Priya S.", "Founder, early riser", "night"],
-      ["Ran my first marathon on Endure. Zero GI issues and I never hit the wall. Already bought the 30 pack.", "Sam K.", "Marathoner", "endure"],
-      ["Watermelon mint after hot yoga is unreal. My whole studio asks what's in my bottle.", "Lena M.", "Yoga instructor", "watermelon"],
+      ["One every 30 minutes on my Sunday long run. It tastes like actual food, not a lab. Already ordered the box.", "Maya R.", "Marathoner", "run"],
+      ["Two in the jersey pocket for every ride. Easy to tear with gloves on and I can read the whole ingredient list.", "Dre T.", "Club cyclist", "ride"],
+      ["Half-time sachet for the whole squad. The lads actually ask for them now.", "Sam K.", "Sunday league captain", "match"],
+      ["I don't do 'sports nutrition'. I do this. Honey, maple, salt. Done.", "Priya S.", "Hiker, early riser", "move"],
+      ["Sweet-salty in the best way. I keep a couple in every bag I own.", "Lena M.", "Run club lead", "original"],
     ];
     $("#reviews").innerHTML = reviews.map(([q, n, r, id]) => { const p = byId(id); return `<article class="review">
         <div class="review__stars">${I.star.repeat(5)} 5/5 <span class="sample-tag">sample review</span></div>
@@ -351,30 +346,30 @@
           <a class="review__product" href="product.html?id=${p.id}">${pouch(p)}<span><b>${p.name}</b>${range(p)}<br><u>Shop Now</u></span></a></div></article>`; }).join("");
 
     // UGC strip
-    const scenes = [["#ffd23f", "#ff8a1f", "yuzu", "pouch", "gym bag essential"], ["#1b1b1b", "#555", "coldbrew", "stick", "5:30am"], ["#7dd3fc", "#e6f7ff", "watermelon", "pouch", ""], ["#2b2e73", "#8b86ff", "night", "pouch", "lights out"], ["#ff7a1a", "#ffd1a8", "endure", "stick", "mile 18"], ["#d6ff3a", "#7fd0ff", "yuzu", "stick", ""], ["#ff5d73", "#ffd1d8", "watermelon", "stick", "post hot yoga"], ["#3a2a22", "#c08a5b", "coldbrew", "pouch", ""]];
-    const tiles = scenes.map(([a, b, id, kind, big]) => { const p = byId(id); return `<div class="ugc__tile" style="--t1:${a};--t2:${b}">${big ? `<span class="big">${big}</span>` : ""}<div class="tilt" style="transform:rotate(${(id.length % 3) * 6 - 6}deg)">${kind === "pouch" ? pouch(p) : `<div style="display:flex;gap:8px">${stick(p)}${stick(p)}${stick(p)}</div>`}</div><span class="tag">@drinksolt</span></div>`; }).join("");
+    const scenes = [["#E2A93B", "#F6E3B4", "original", "pouch", "pocket it"], ["#16301F", "#3E6B4C", "run", "stick", "5:30am"], ["#C98A2E", "#F1D9A4", "ride", "pouch", ""], ["#2F5A3F", "#B9CDAA", "match", "pouch", "half time"], ["#8E4A22", "#E7B98C", "run", "stick", "mile 18"], ["#4F7C83", "#E9DCC0", "move", "stick", ""], ["#3E6B34", "#D3E2B8", "match", "stick", "keep moving"], ["#16301F", "#C98A2E", "original", "pouch", ""]];
+    const tiles = scenes.map(([a, b, id, kind, big]) => { const p = byId(id); return `<div class="ugc__tile" style="--t1:${a};--t2:${b}">${big ? `<span class="big">${big}</span>` : ""}<div class="tilt" style="transform:rotate(${(id.length % 3) * 6 - 6}deg)">${kind === "pouch" ? pouch(p) : `<div style="display:flex;gap:8px">${stick(p)}${stick(p, "", true)}${stick(p)}</div>`}</div><span class="tag">@thehoneyworth</span></div>`; }).join("");
     $("#ugc").innerHTML = tiles + tiles;
   }
 
   /* ================= product page ================= */
   function initPDP() {
-    const id = new URLSearchParams(location.search).get("id") || "yuzu";
+    const id = new URLSearchParams(location.search).get("id") || "original";
     const p = byId(id);
-    let pack = 15, sub = true;
-    document.title = `${p.name} | SOLT`;
+    let pack = 20, sub = true;
+    document.title = `${p.name} | Honeyworth`;
     document.documentElement.style.setProperty("--sky1", p.sky[0]); document.documentElement.style.setProperty("--sky2", p.sky[1]);
 
     const views = [
       { thumb: pouch(p), html: `<div class="tilt" data-drag>${pouch(p)}</div><span class="hint">Drag to rotate</span>` },
-      { thumb: stick(p), html: `<div class="gallery__sticks">${stick(p)}${stick(p)}${stick(p)}${stick(p)}</div>`, cls: "" },
-      { thumb: `<span style="font-weight:800;font-size:11px">FACTS</span>`, html: `<div class="panel"><h4>Supplement Facts</h4><small>Serving size 1 stick (6g)</small>${p.nutrition.map(([k, v]) => `<div><b>${k}</b><span>${v}</span></div>`).join("")}<p class="fine" style="margin:10px 0 0">Other ingredients: ${p.ingr.join(", ")}, citric acid, natural flavors, stevia leaf extract.</p></div>` },
+      { thumb: stick(p), html: `<div class="gallery__sticks">${stick(p)}${stick(p, "", true)}${stick(p)}${stick(p, "", true)}</div>`, cls: "" },
+      { thumb: `<span style="font-weight:800;font-size:11px">FACTS</span>`, html: `<div class="facts"><img src="assets/img/hw-label.webp" alt="Back of the Honeyworth Energy Gel sachet with ingredients and nutrition facts"><div class="panel"><h4>Nutrition Facts</h4><small>Serving size 1 sachet (40 g)</small>${p.nutrition.map(([k, v]) => `<div><b>${k}</b><span>${v}</span></div>`).join("")}<p class="fine" style="margin:10px 0 0">Ingredients: ${p.ingr.join(", ")}. Nothing else.</p></div></div>` },
       { thumb: `<span style="width:100%;height:100%;background:linear-gradient(180deg,${p.sky[0]},${p.sky[1]})"></span>`, html: `<div class="cubes" data-cubes="9"></div><div class="tilt floaty">${pouch(p)}</div>`, cls: "gallery__view--sky" },
     ];
     $("#pdp").innerHTML = `
       <div class="gallery"><div class="gallery__thumbs">${views.map((v, i) => `<button class="${i === 0 ? "is-active" : ""}" data-view="${i}" aria-label="Image ${i + 1}">${v.thumb}</button>`).join("")}</div>
         <div class="gallery__main" data-tilt>${views.map((v, i) => `<div class="gallery__view ${v.cls || ""} ${i === 0 ? "is-active" : ""}">${v.html}</div>`).join("")}</div></div>
       <div class="buy">
-        <div class="buy__brand">SOLT</div>
+        <div class="buy__brand">HONEYWORTH</div>
         <h1 class="buy__title">${p.name}</h1>
         <div class="buy__rating"><span class="sample-tag" style="background:var(--accent);color:var(--ink)">NEW</span><span>First batch · limited run</span></div>
         <div class="buy__price" id="price"></div>
@@ -383,7 +378,7 @@
         <p class="buy__desc">${p.desc}</p>
         <div class="buy__tag">${p.tagline}</div>
         <div class="opt-label"><span>Pack size:</span><span id="pack-label"></span></div>
-        <div class="packs">${[15, 30].map((n) => `<button class="pack" data-pack="${n}"><b>${n} sticks</b><small>${money(p.price[n] / n)}/serving</small>${n === 30 ? `<span class="save">save ${saving(p)}%</span>` : ""}</button>`).join("")}</div>
+        <div class="packs">${[20, 40].map((n) => `<button class="pack" data-pack="${n}"><b>${n} sachets</b><small>${money(p.price[n] / n)}/serving</small>${n === 40 ? `<span class="save">save ${saving(p)}%</span>` : ""}</button>`).join("")}</div>
         <div class="opt-label"><span>Purchase type:</span></div>
         <div class="purchase">
           <label data-sub="1"><input type="radio" name="sub" checked><span>Subscribe &amp; save ${Math.round(CFG.SUBSCRIBE_DISCOUNT * 100)}%<small>Delivered every 30 days · skip or cancel anytime</small></span><em id="sub-price"></em></label>
@@ -402,9 +397,9 @@
       const full = p.price[pack], disc = full * (1 - CFG.SUBSCRIBE_DISCOUNT);
       $("#price").innerHTML = sub ? `${money(disc)} <s>${money(full)}</s>` : money(full);
       $("#sub-price").textContent = money(disc); $("#once-price").textContent = money(full);
-      $("#pack-label").textContent = `${pack} sticks`;
+      $("#pack-label").textContent = `${pack} sachets`;
       $("#sub-note").style.display = sub ? "" : "none";
-      $("#sticky-price").textContent = money(sub ? disc : full) + ` · ${pack} sticks`;
+      $("#sticky-price").textContent = money(sub ? disc : full) + ` · ${pack} sachets`;
     };
     $("#sticky-pouch").innerHTML = pouch(p); $("#sticky-name").firstChild.textContent = p.name;
     $$(".pack").forEach((b) => (b.onclick = () => { pack = +b.dataset.pack; sync(); }));
@@ -420,14 +415,14 @@
     // drag to rotate the 3D pouch
     const drag = $("[data-drag]"), dp = $(".pouch", drag); let start = null, base = -14;
     drag.addEventListener("pointerdown", (e) => { start = e.clientX; drag.setPointerCapture(e.pointerId); dp.style.transition = "none"; });
-    drag.addEventListener("pointermove", (e) => { if (start === null) return; const ry = Math.max(-75, Math.min(75, base + (e.clientX - start) * .5)); dp.style.setProperty("--ry", ry + "deg"); });
+    drag.addEventListener("pointermove", (e) => { if (start === null) return; const ry = base + (e.clientX - start) * .6; dp.style.setProperty("--ry", ry + "deg"); });
     const end = (e) => { if (start === null) return; base = parseFloat(dp.style.getPropertyValue("--ry")) || base; start = null; dp.style.transition = ""; };
     drag.addEventListener("pointerup", end); drag.addEventListener("pointercancel", end);
     drag.style.touchAction = "pan-y"; drag.style.cursor = "grab";
 
     // comparison table + science + related
-    const rows = [["Real sea salt", 1, 0, 0], ["1000mg sodium per serving", 1, 0, 0], ["Zero sugar", 1, 0, 1], ["No artificial dyes", 1, 0, 1], ["Tastes amazing", 1, 1, 0], ["Fits in your pocket", 1, 0, 0]];
-    $("#vs").innerHTML = `<thead><tr><th></th><th class="ours">SOLT</th><th>Sports drink</th><th>Plain water</th></tr></thead><tbody>${rows.map(([k, ...v]) => `<tr><td>${k}</td>${v.map((x, i) => `<td class="${i === 0 ? "ours" : ""}">${x ? I.check : I.x}</td>`).join("")}</tr>`).join("")}</tbody>`;
+    const rows = [["Honey, maple & sea salt", 1, 0, 0], ["Just 3 ingredients", 1, 0, 1], ["30g carbs per serving", 1, 1, 0], ["Electrolytes", 1, 1, 0], ["Nothing artificial", 1, 0, 1], ["Fits in your pocket", 1, 1, 0]];
+    $("#vs").innerHTML = `<thead><tr><th></th><th class="ours">Honeyworth</th><th>Lab-built gel</th><th>Plain water</th></tr></thead><tbody>${rows.map(([k, ...v]) => `<tr><td>${k}</td>${v.map((x, i) => `<td class="${i === 0 ? "ours" : ""}">${x ? I.check : I.x}</td>`).join("")}</tr>`).join("")}</tbody>`;
     $("#related").innerHTML = PRODUCTS.filter((x) => x.id !== p.id).map(cardHTML).join("");
     $$("#related .card").forEach((c) => { const rid = $("a", c).href.split("id=")[1]; $(".card__quick", c).innerHTML = `<button class="btn btn--white btn--block" data-quick="${rid}" style="padding:12px">Quick View</button>`; });
     $$("[data-ticker]").forEach((t) => { const one = t.dataset.ticker.split("|").map((x) => `<span class="ticker__item">${x} ${I.spark}</span>`).join(""); t.innerHTML = one + one + one + one; });
@@ -435,7 +430,7 @@
     // sticky add-to-cart bar
     new IntersectionObserver(([e]) => $("#sticky-atc").classList.toggle("show", !e.isIntersecting && e.boundingClientRect.top < 0)).observe($("#atc"));
 
-    track("view_item", { product: p.id, value: p.price[15], ids: [p.id] });
+    track("view_item", { product: p.id, value: p.price[20], ids: [p.id] });
   }
 
   /* ================= boot ================= */
@@ -456,12 +451,12 @@
       else if (t.closest("[data-open-nav]")) { $(".mobile-nav").classList.add("open"); }
       else if (t.closest("[data-close]") || t.id === "scrim") closeAll();
       else if (t.closest("#checkout-btn")) startCheckout();
-      else if (t.closest("[data-upsell]")) addToCart(t.closest("[data-upsell]").dataset.upsell, 15, true, 1, "cart_upsell");
+      else if (t.closest("[data-upsell]")) addToCart(t.closest("[data-upsell]").dataset.upsell, 20, true, 1, "cart_upsell");
       else if (t.closest("[data-quick]")) { e.preventDefault(); quickView(t.closest("[data-quick]").dataset.quick); }
       else if (t.closest("[data-goal]")) {
-        const goal = t.closest("[data-goal]").dataset.goal; store.set("solt_goal", goal); track("popup_goal", { goal });
-        $("#popup-body").innerHTML = `<div class="logo" style="justify-content:center;font-size:22px">SOLT</div><h3 class="h-lg" style="font-size:clamp(30px,3.6vw,44px)">Almost there.</h3><p style="margin:0">Where should we send your 30% off code?</p>
-          <form data-lead="popup" style="display:grid;gap:10px"><input class="field" type="email" required placeholder="you@email.com" aria-label="Email"><button class="btn btn--accent btn--block">Unlock 30% off</button></form><p class="fine">By signing up you agree to receive marketing emails from SOLT.</p>`;
+        const goal = t.closest("[data-goal]").dataset.goal; store.set("hw_goal", goal); track("popup_goal", { goal });
+        $("#popup-body").innerHTML = `<div class="logo" style="justify-content:center">${LOGO}</div><h3 class="h-lg" style="font-size:clamp(30px,3.6vw,44px)">Almost there.</h3><p style="margin:0">Where should we send your 30% off code?</p>
+          <form data-lead="popup" style="display:grid;gap:10px"><input class="field" type="email" required placeholder="you@email.com" aria-label="Email"><button class="btn btn--accent btn--block">Unlock 30% off</button></form><p class="fine">By signing up you agree to receive marketing emails from Honeyworth.</p>`;
         $("#popup-body input").focus();
       }
       else if (t.closest("[data-soon]")) { e.preventDefault(); toast("Coming soon"); track("dead_click", { label: t.closest("[data-soon]").getAttribute("aria-label") || t.closest("[data-soon]").textContent.trim() }); }
